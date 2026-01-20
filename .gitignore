@@ -1,0 +1,131 @@
+# ============================================
+# AdaptiMultiRAG .gitignore
+# ============================================
+
+# --------------------------------------------
+# Python
+# --------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.pot
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# --------------------------------------------
+# Node.js
+# --------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+lerna-debug.log*
+.cache/
+
+# Build output
+dist/
+dist-ssr/
+
+# --------------------------------------------
+# Environment variables (重要! 包含敏感信息)
+# --------------------------------------------
+.env
+.env.local
+.env.*.local
+*.env
+
+# --------------------------------------------
+# IDE & Editor
+# --------------------------------------------
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*.sw?
+*~
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# --------------------------------------------
+# OS generated files
+# --------------------------------------------
+.DS_Store
+Thumbs.db
+
+# --------------------------------------------
+# Database
+# --------------------------------------------
+*.db
+*.sqlite
+*.sqlite3
+dump.rdb
+
+# --------------------------------------------
+# Logs
+# --------------------------------------------
+logs/
+*.log
+
+# --------------------------------------------
+# Project specific - Backend
+# --------------------------------------------
+# 环境配置文件
+rag-backend/backend/.env
+rag-backend/backend/.env.local
+
+# LangGraph API 临时文件
+.langgraph_api
+
+# LightRAG 知识图谱存储数据（用户数据）
+rag-backend/backend/rag/storage/lightrag_storage/*/
+!rag-backend/backend/rag/storage/lightrag_storage/.gitkeep
+
+# Milvus/MinIO 存储卷数据
+rag-backend/backend/rag/storage/volumes/
+
+# 用户上传的文件（测试数据）
+rag-backend/uploads/*
+!rag-backend/uploads/.gitkeep
+
+# uv lock 文件（可选，如需锁定版本可移除此行）
+# rag-backend/uv.lock
+
+# --------------------------------------------
+# Git backup directories
+# --------------------------------------------
+.git_backup/
+.git_main/
+
+# --------------------------------------------
+# Package output (打包脚本生成)
+# --------------------------------------------
+# 如果 dist/ 用于存放打包输出，已被上面的规则忽略

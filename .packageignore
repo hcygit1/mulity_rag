@@ -1,0 +1,43 @@
+# AdaptiMultiRAG 打包排除文件
+# 这些文件/目录不会包含在分发包中
+
+# Python
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.egg-info/
+rag-backend/.venv/
+rag-backend/**/*.log
+
+# Node.js
+rag-frontend/node_modules/
+rag-frontend/dist/
+
+# 数据库和上传文件
+rag-backend/uploads/*.pdf
+rag-backend/uploads/*.docx
+rag-backend/uploads/*.txt
+
+# 环境变量（保留示例文件）
+rag-backend/backend/.env
+
+# 日志
+*.log
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git（如果要完全移除版本历史）
+# .git/
+
+# 临时文件
+*.tmp
+*.bak
+*~

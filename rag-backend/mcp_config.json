@@ -1,0 +1,30 @@
+{
+  "mcpServers": {
+    "fetch": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["mcp-server-fetch"],
+      "env": {},
+      "enabled": true,
+      "description": "网页内容抓取"
+    },
+    "tavily": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["--from", "tavily-mcp", "tavily"],
+      "env": {
+        "TAVILY_API_KEY": "${TAVILY_API_KEY}"
+      },
+      "enabled": true,
+      "description": "Tavily 联网搜索"
+    },
+    "time": {
+      "type": "stdio",
+      "command": "uvx", 
+      "args": ["mcp-server-time"],
+      "env": {},
+      "enabled": false,
+      "description": "时间日期查询"
+    }
+  }
+}
