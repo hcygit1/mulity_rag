@@ -9,7 +9,7 @@ from backend.rag.storage.milvus_storage import MilvusStorage
 from backend.rag.storage.lightrag_storage import LightRAGStorage
 from backend.rag.chunks.chunks import TextChunker
 from backend.rag.chunks.models import ChunkConfig, ChunkStrategy, DocumentContent
-from backend.config.embedding import get_embedding_model
+from backend.config.models import get_embedding_model
 from backend.config.log import get_logger
 
 logger = get_logger(__name__)

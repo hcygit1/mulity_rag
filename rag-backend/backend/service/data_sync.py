@@ -6,7 +6,7 @@
 """
 from typing import Dict, Any, Optional
 from backend.config.database import DatabaseFactory
-from backend.config.embedding import get_embedding_model
+from backend.config.models import get_embedding_model
 from backend.config.log import get_logger
 from backend.model.knowledge_library import KnowledgeLibrary, KnowledgeDocument
 from backend.rag.storage.milvus_storage import MilvusStorage

@@ -1,14 +1,11 @@
-import os
 from threading import Lock
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
-from dotenv import load_dotenv
 
-# 加载 .env 文件 - 从backend目录加载
-env_path = os.path.join(os.path.dirname(__file__), '..', '.env')
-load_dotenv(env_path)
+from backend.config.settings import settings
 
 Base = declarative_base()
+
 
 class DatabaseFactory:
     _engine = None
@@ -25,7 +22,7 @@ class DatabaseFactory:
                 # 第二次检查：防止多个线程同时通过第一次检查后重复创建引擎
                 # 这是双重检查锁定模式(Double-Checked Locking Pattern)的核心
                 if cls._engine is None:
-                    db_url = os.getenv("DB_URL")
+                    db_url = settings.DB_URL
                     if not db_url:
                         raise RuntimeError("❌ DB_URL not found in environment variables")
                     cls._engine = create_engine(

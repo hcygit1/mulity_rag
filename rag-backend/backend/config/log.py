@@ -1,6 +1,5 @@
 import logging
 import logging.config
-import os
 from datetime import datetime
 from pathlib import Path
 from backend.utils.timezone import ChinaTimeFormatter, get_china_now
@@ -139,12 +138,12 @@ def setup_default_logging():
     """
     使用默认配置设置日志系统
     """
-    log_level = os.getenv("LOG_LEVEL", "INFO").upper()
-    log_dir = os.getenv("LOG_DIR", "logs")
+    # 延迟导入避免循环依赖
+    from backend.config.settings import settings
     
     setup_logging(
-        log_level=log_level,
-        log_dir=log_dir,
+        log_level=settings.LOG_LEVEL.upper(),
+        log_dir=settings.LOG_DIR,
         enable_console=True,
         enable_file=False  # 禁用文件日志输出
     )

@@ -3,13 +3,13 @@ from backend.param.common import Response
 from backend.service.crawl import get_crawl_status, initialize_collection_and_store
 from backend.config.log import get_logger
 from backend.config.database import DatabaseFactory
+from backend.config.settings import settings
 from backend.model.knowledge_library import KnowledgeLibrary
 from backend.param.crawl import CrawlRequest, UploadDocRequest, OSSProcessRequest
-from backend.config.oss import get_presigned_url_for_upload
+from backend.config.oss import get_presigned_url_for_upload, get_presigned_url_for_download
 from backend.rag.chunks.document_extraction import DocumentExtractor
 from backend.service.data_sync import DataSyncService
 import asyncio
-
 
 
 logger = get_logger(__name__)
@@ -152,15 +152,13 @@ async def process_oss_document(request: OSSProcessRequest) -> Response:
         
         # 2. 生成带签名的下载 URL（MinerU 需要能访问文件）
         from backend.config.oss import get_presigned_url_for_download
-        import os
-        
         # 从 oss_url 提取 key（文件路径）
         # URL 格式: https://bucket.cos.region.myqcloud.com/key
         from urllib.parse import urlparse, unquote
         parsed_url = urlparse(request.oss_url)
         file_key = unquote(parsed_url.path.lstrip('/'))  # 去掉开头的 /
         
-        bucket = os.getenv("COS_BUCKET_NAME")
+        bucket = settings.COS_BUCKET_NAME
         signed_url_result = get_presigned_url_for_download(bucket, file_key, expire_seconds=3600)
         signed_url = signed_url_result['url']
         

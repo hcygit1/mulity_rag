@@ -1,6 +1,6 @@
 from rag.chunks.chunks import ChunkResult, TextChunker
 from rag.chunks.models import ChunkConfig, ChunkStrategy, DocumentContent
-from config.embedding import get_embedding_model
+from backend.config.models import get_embedding_model
 from rag.storage.milvus_storage import MilvusStorage
 milvus_storage = MilvusStorage(
         embedding_function=get_embedding_model()

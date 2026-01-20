@@ -15,6 +15,7 @@ from backend.agent.models import (
     register_model_provider
 )
 from backend.config.log import get_logger
+from backend.config.settings import settings
 from langchain_qwq import ChatQwen
 
 # 初始化日志
@@ -35,10 +36,9 @@ def initialize_chat_model():
     )
 
     logger.info("加载大模型...")
-    # 从环境变量获取大语言模型配置
-    api_key = os.getenv("LLM_DASHSCOPE_API_KEY")
-    api_base = os.getenv("LLM_DASHSCOPE_API_BASE", "https://dashscope.aliyuncs.com/compatible-mode/v1")
-    model_name = os.getenv("LLM_DASHSCOPE_CHAT_MODEL", "qwen3-max-preview")
+    api_key = settings.LLM_DASHSCOPE_API_KEY
+    api_base = settings.LLM_DASHSCOPE_API_BASE
+    model_name = settings.LLM_DASHSCOPE_CHAT_MODEL
 
     if not api_key:
         raise ValueError("LLM_DASHSCOPE_API_KEY 环境变量未设置")
@@ -64,9 +64,8 @@ def initialize_embeddings_model():
         ValueError: 当VECTOR_DASHSCOPE_API_KEY环境变量未设置时
     """
     logger.info("注册向量模型提供商...")
-    # 从环境变量获取向量模型配置
-    api_base = os.getenv("VECTOR_DASHSCOPE_API_BASE", "https://dashscope.aliyuncs.com/compatible-mode/v1")
-    embedding_model = os.getenv("VECTOR_DASHSCOPE_EMBEDDING_MODEL", "text-embedding-v4")
+    api_base = settings.VECTOR_DASHSCOPE_API_BASE
+    embedding_model = settings.VECTOR_DASHSCOPE_EMBEDDING_MODEL
 
     register_embeddings_provider(
         provider_name="ali",
@@ -75,8 +74,7 @@ def initialize_embeddings_model():
     )
 
     logger.info("加载向量模型...")
-    # 从环境变量获取向量模型 API Key
-    api_key = os.getenv("VECTOR_DASHSCOPE_API_KEY")
+    api_key = settings.VECTOR_DASHSCOPE_API_KEY
     if not api_key:
         raise ValueError("VECTOR_DASHSCOPE_API_KEY 环境变量未设置")
 
@@ -108,3 +106,16 @@ def initialize_models() -> Tuple:
     
     logger.info("所有模型初始化完成")
     return chat_model, embeddings_model
+
+
+# 别名函数，保持向后兼容（原 config/embedding.py 中的函数）
+def get_embedding_model():
+    """
+    获取向量模型实例
+    
+    这是 initialize_embeddings_model() 的别名，保持向后兼容。
+    
+    Returns:
+        embeddings_model: 向量模型实例
+    """
+    return initialize_embeddings_model()

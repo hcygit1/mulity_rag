@@ -1,13 +1,14 @@
 import os
 from typing import List, Dict, Any, Optional
 import numpy as np
-from dotenv import load_dotenv
 import logging
 
 from lightrag import LightRAG, QueryParam
 from lightrag.llm.openai import openai_complete_if_cache, openai_embed
 from lightrag.kg.shared_storage import initialize_pipeline_status
 from lightrag.utils import setup_logger, EmbeddingFunc
+
+from ...config.settings import settings
 
 # 设置日志
 setup_logger("lightrag", level="INFO")
@@ -34,9 +35,6 @@ class LightRAGStorage:
         """
         self.workspace = workspace
 
-        # 加载环境变量
-        load_dotenv()
-
         # 使用文件同级的 lightrag_storage 目录
         self.working_dir = os.path.join(os.path.dirname(__file__), "lightrag_storage")
 
@@ -55,12 +53,12 @@ class LightRAGStorage:
             **kwargs
         ) -> str:
             return await openai_complete_if_cache(
-                model=os.getenv("LLM_DASHSCOPE_CHAT_MODEL", "qwen-plus"),
+                model=settings.LLM_DASHSCOPE_CHAT_MODEL,
                 prompt=prompt,
                 system_prompt=system_prompt,
                 history_messages=history_messages,
-                api_key=os.getenv("LLM_DASHSCOPE_API_KEY"),
-                base_url=os.getenv("LLM_DASHSCOPE_API_BASE", "https://dashscope.aliyuncs.com/compatible-mode/v1"),
+                api_key=settings.LLM_DASHSCOPE_API_KEY,
+                base_url=settings.LLM_DASHSCOPE_API_BASE,
                 **kwargs
             )
         return llm_model_func
@@ -70,9 +68,9 @@ class LightRAGStorage:
         async def embedding_func(texts: List[str]) -> np.ndarray:
             return await openai_embed(
                 texts,
-                model=os.getenv("VECTOR_DASHSCOPE_EMBEDDING_MODEL", "text-embedding-v4"),
-                api_key=os.getenv("VECTOR_DASHSCOPE_API_KEY"),
-                base_url=os.getenv("VECTOR_DASHSCOPE_API_BASE", "https://dashscope.aliyuncs.com/compatible-mode/v1")
+                model=settings.VECTOR_DASHSCOPE_EMBEDDING_MODEL,
+                api_key=settings.VECTOR_DASHSCOPE_API_KEY,
+                base_url=settings.VECTOR_DASHSCOPE_API_BASE
             )
         return embedding_func
 
@@ -86,25 +84,18 @@ class LightRAGStorage:
         llm_model_func = await self._get_llm_model_func()
         embedding_func = await self._get_embedding_func()
 
-        # 存储配置 - 统一使用字符串方式，让LightRAG自动处理
-        # 图存储配置
-        graph_storage = os.getenv("LIGHTRAG_GRAPH_STORAGE", "Neo4JStorage")
-
-        # KV存储配置
-        kv_storage = os.getenv("LIGHTRAG_KV_STORAGE", "PGKVStorage")
-
-        # 文档状态存储配置
-        doc_status_storage = os.getenv("LIGHTRAG_DOC_STATUS_STORAGE", "PGDocStatusStorage")
-
-        # 向量存储配置
-        vector_storage = os.getenv("LIGHTRAG_VECTOR_STORAGE", "MilvusVectorDBStorage")
+        # 存储配置 - 使用统一配置
+        graph_storage = settings.LIGHTRAG_GRAPH_STORAGE
+        kv_storage = settings.LIGHTRAG_KV_STORAGE
+        doc_status_storage = settings.LIGHTRAG_DOC_STATUS_STORAGE
+        vector_storage = settings.LIGHTRAG_VECTOR_STORAGE
 
         # 创建LightRAG实例
         self.rag = LightRAG(
             working_dir=self.working_dir,
             embedding_func=EmbeddingFunc(
                 func=embedding_func,
-                embedding_dim=int(os.getenv("EMBEDDING_DIM", 1024))
+                embedding_dim=settings.EMBEDDING_DIM
             ),
             llm_model_func=llm_model_func,
             workspace=self.workspace,

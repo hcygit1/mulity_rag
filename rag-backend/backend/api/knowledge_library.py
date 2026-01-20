@@ -9,6 +9,7 @@ from backend.service import knowledge_library as library_service
 from backend.config.oss import get_presigned_url_for_upload
 from backend.config.log import get_logger
 from backend.config.dependencies import get_current_user
+from backend.config.settings import settings
 
 logger = get_logger(__name__)
 
@@ -101,13 +102,12 @@ async def get_upload_url(request: UploadDocRequest, current_user: int = Depends(
         logger.info(f"用户 {current_user} 请求获取COS上传签名URL: {request.document_name}")
         
         # 检查是否配置了腾讯云COS
-        import os
-        if not os.getenv("COS_SECRET_ID"):
+        if not settings.COS_SECRET_ID:
             logger.warning("COS未配置，返回本地上传提示")
             return Response.error("COS未配置，请使用本地上传功能或配置腾讯云COS")
         
         # 获取存储桶名称
-        bucket = os.getenv("COS_BUCKET_NAME", "ragagent-file-1234567890")
+        bucket = settings.COS_BUCKET_NAME or "ragagent-file-1234567890"
         
         # 调用COS服务获取上传签名URL
         upload_url = get_presigned_url_for_upload(

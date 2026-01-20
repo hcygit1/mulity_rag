@@ -1,6 +1,7 @@
-import os
 import redis.asyncio as redis
 from typing import Optional
+
+from backend.config.settings import settings
 
 
 class RedisClientFactory:
@@ -28,10 +29,10 @@ class RedisClientFactory:
     def _create_instance(cls):
         """创建Redis客户端实例"""
         cls._instance = redis.Redis(
-            host=os.getenv("REDIS_HOST", "127.0.0.1"),
-            port=int(os.getenv("REDIS_PORT", "6379")),
-            db=int(os.getenv("REDIS_DB", "0")),
-            password=os.getenv("REDIS_PASSWORD"),
+            host=settings.REDIS_HOST,
+            port=settings.REDIS_PORT,
+            db=settings.REDIS_DB,
+            password=settings.REDIS_PASSWORD,
             decode_responses=True,
             socket_connect_timeout=5,
             socket_keepalive=True,

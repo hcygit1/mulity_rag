@@ -1,17 +1,13 @@
 """Milvus存储管理类"""
 
-import os
 import time
 from typing import List, Optional, Dict, Any
-from langchain_milvus import Milvus,BM25BuiltInFunction
+from langchain_milvus import Milvus, BM25BuiltInFunction
 from langchain_core.embeddings import Embeddings
 from langchain_core.documents import Document
-from dotenv import load_dotenv
 
 from ..chunks.models import ChunkResult
-
-# 加载环境变量
-load_dotenv()
+from ...config.settings import settings
 
 
 class MilvusStorage:
@@ -31,17 +27,17 @@ class MilvusStorage:
         
         Args:
             embedding_function: LangChain embedding模型实例（必需）
-            uri: Milvus服务地址，默认从环境变量MILVUS_URI获取
-            db_name: 数据库名称，默认从环境变量MILVUS_DB_NAME获取
-            token: 认证令牌，默认从环境变量MILVUS_TOKEN获取（可选）
-            collection_name: 集合名称，默认从环境变量MILVUS_COLLECTION_NAME获取
+            uri: Milvus服务地址，默认从配置获取
+            db_name: 数据库名称，默认从配置获取
+            token: 认证令牌，默认从配置获取（可选）
+            collection_name: 集合名称，默认从配置获取
         """
         
-        # 从环境变量读取配置，如果参数没有提供的话
-        self.uri = uri or os.getenv('MILVUS_URI', 'http://localhost:19530')
-        self.db_name = db_name or os.getenv('MILVUS_DB_NAME', 'rag')
-        self.token = token or os.getenv('MILVUS_TOKEN') or None
-        self.collection_name = collection_name or os.getenv('MILVUS_COLLECTION_NAME', 'chunks')
+        # 从统一配置读取，如果参数没有提供的话
+        self.uri = uri or settings.MILVUS_URI
+        self.db_name = db_name or settings.MILVUS_DB_NAME
+        self.token = token or settings.MILVUS_TOKEN
+        self.collection_name = collection_name or settings.MILVUS_COLLECTION_NAME
         
         # 设置embedding函数
         self.embedding_function = embedding_function

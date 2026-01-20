@@ -1,16 +1,11 @@
 """
 联网搜索服务 - 直接调用 Tavily API
 """
-import os
 import httpx
 from typing import Dict, Any, List
-from dotenv import load_dotenv
 
 from backend.config.log import get_logger
-
-# 加载环境变量
-env_path = os.path.join(os.path.dirname(__file__), '..', '.env')
-load_dotenv(env_path)
+from backend.config.settings import settings
 
 logger = get_logger(__name__)
 
@@ -40,7 +35,7 @@ async def tavily_search(
     Returns:
         搜索结果
     """
-    api_key = os.getenv("TAVILY_API_KEY")
+    api_key = settings.TAVILY_API_KEY
     
     if not api_key:
         logger.warning("TAVILY_API_KEY 未配置")

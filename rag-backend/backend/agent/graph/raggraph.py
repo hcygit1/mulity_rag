@@ -1,6 +1,5 @@
 from typing import Dict, Any, List, Optional
 from langgraph.graph import StateGraph, END
-import os
 from langgraph.checkpoint.postgres import PostgresSaver
 from langgraph.store.postgres import PostgresStore
 from psycopg_pool import ConnectionPool
@@ -10,6 +9,7 @@ from ..contexts.raggraph_context import RAGContext
 from .raggraph_node import RAGNodes
 from ...rag.storage.milvus_storage import MilvusStorage
 from ...rag.storage.lightrag_storage import LightRAGStorage
+from ...config.settings import settings
 
 
 class RAGGraph:
@@ -74,14 +74,8 @@ class RAGGraph:
             print(f"[RAG Graph] LightRAG存储初始化失败: {e}")
             self.lightrag_storage = None
 
-        # 从环境变量读取数据库连接配置
-        self.db_config = {
-            "host": os.getenv("POSTGRES_HOST", "localhost"),
-            "port": int(os.getenv("POSTGRES_PORT", "5432")),
-            "database": os.getenv("POSTGRES_DATABASE", "rag_checkpoint"),
-            "user": os.getenv("POSTGRES_USER", "postgres"),
-            "password": os.getenv("POSTGRES_PASSWORD", "123456")
-        }
+        # 使用统一配置读取数据库连接配置
+        self.db_config = settings.postgres_config
 
         # 只在启用checkpointer时才设置checkpoint和memory store
         if self.enable_checkpointer:

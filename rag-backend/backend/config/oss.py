@@ -1,11 +1,11 @@
 """
 腾讯云 COS 对象存储配置
 """
-import os
 from datetime import datetime, timedelta
 from qcloud_cos import CosConfig, CosS3Client
 from threading import Lock
-from dotenv import load_dotenv
+
+from backend.config.settings import settings
 
 
 class CosClientFactory:
@@ -20,16 +20,10 @@ class CosClientFactory:
         if cls._instance is None:
             with cls._lock:
                 if cls._instance is None:
-                    load_dotenv()
-                    
-                    secret_id = os.getenv('COS_SECRET_ID')
-                    secret_key = os.getenv('COS_SECRET_KEY')
-                    region = os.getenv('COS_REGION', 'ap-shanghai')
-                    
                     config = CosConfig(
-                        Region=region,
-                        SecretId=secret_id,
-                        SecretKey=secret_key,
+                        Region=settings.COS_REGION,
+                        SecretId=settings.COS_SECRET_ID,
+                        SecretKey=settings.COS_SECRET_KEY,
                     )
                     cls._instance = CosS3Client(config)
         
@@ -45,7 +39,6 @@ def get_presigned_url_for_upload(bucket: str, key: str, expire_seconds: int = 36
         key: 对象键（文件路径）
         expire_seconds: 过期时间（秒）
     """
-    load_dotenv()
     client = CosClientFactory.get_client()
     
     url = client.get_presigned_url(
@@ -74,7 +67,6 @@ def get_presigned_url_for_download(bucket: str, key: str, expire_seconds: int = 
         key: 对象键（文件路径）
         expire_seconds: 过期时间（秒）
     """
-    load_dotenv()
     client = CosClientFactory.get_client()
     
     url = client.get_presigned_url(
