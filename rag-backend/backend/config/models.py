@@ -16,10 +16,29 @@ from backend.agent.models import (
 )
 from backend.config.log import get_logger
 from backend.config.settings import settings
-from langchain_qwq import ChatQwen
 
 # 初始化日志
 logger = get_logger(__name__)
+
+# DashScope OpenAI 兼容端点（langchain-qwq 与 langchain 1.x 不兼容，改走 ChatOpenAI + 兼容模式）
+DASHSCOPE_COMPAT_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+
+
+def register_qwen_provider():
+    """注册通义千问 provider（DashScope OpenAI 兼容模式）。
+
+    API Key 沿用既有环境变量 LLM_DASHSCOPE_API_KEY / DASHSCOPE_API_KEY，
+    并设置 QWEN_API_KEY 别名供 load_chat_model("qwen:...") 读取。
+    """
+    api_key = os.getenv("LLM_DASHSCOPE_API_KEY") or os.getenv("DASHSCOPE_API_KEY") or ""
+    if api_key:
+        os.environ.setdefault("QWEN_API_KEY", api_key)
+    register_model_provider(
+        provider_name="qwen",
+        chat_model="openai",
+        base_url=settings.LLM_DASHSCOPE_API_BASE,
+    )
+
 
 
 def initialize_chat_model():
@@ -30,10 +49,7 @@ def initialize_chat_model():
         chat_model: 初始化后的聊天模型实例
     """
     logger.info("注册大模型提供商...")
-    register_model_provider(
-        provider_name="qwen",
-        chat_model=ChatQwen
-    )
+    register_qwen_provider()
 
     logger.info("加载大模型...")
     api_key = settings.LLM_DASHSCOPE_API_KEY
