@@ -21,7 +21,7 @@ from backend.agent.models import (
 from backend.agent.graph import RAGGraph
 from backend.agent.contexts.raggraph_context import RAGContext
 from backend.config.log import setup_default_logging, get_logger
-from langchain_qwq import ChatQwen
+from backend.config.models import register_qwen_provider
 # 初始化日志
 setup_default_logging()
 logger = get_logger(__name__)
@@ -30,10 +30,7 @@ def init_models():
     """初始化大模型和向量模型"""
     logger.info("开始初始化模型...")
     
-    register_model_provider(
-        provider_name="qwen",
-        chat_model=ChatQwen
-    )
+    register_qwen_provider()
 
     chat_model = load_chat_model(
         "qwen:qwen3-max-preview"
