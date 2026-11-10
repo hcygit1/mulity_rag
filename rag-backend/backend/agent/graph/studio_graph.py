@@ -21,7 +21,7 @@ try:
         register_model_provider
     )
     from backend.agent.graph import RAGGraph
-    from langchain_qwq import ChatQwen
+    from backend.config.models import register_qwen_provider
     IMPORTS_SUCCESSFUL = True
 except ImportError as e:
     print(f"导入失败: {e}")
@@ -34,10 +34,7 @@ def init_models():
     print("开始初始化模型...")
 
     # 1. 注册并加载大模型 (DeepSeek-V3.1)
-    register_model_provider(
-        provider_name="qwen",
-        chat_model=ChatQwen
-    )
+    register_qwen_provider()
 
     chat_model = load_chat_model(
         "qwen:qwen3-max-preview"
