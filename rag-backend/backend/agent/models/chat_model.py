@@ -3,7 +3,7 @@ from typing import Any, Optional, Union, cast
 
 from langchain.chat_models.base import (
     BaseChatModel,
-    _SUPPORTED_PROVIDERS,
+    _BUILTIN_PROVIDERS as _SUPPORTED_PROVIDERS,  # langchain 1.x 改名，dict 类型，in / list() 语义不变
     _init_chat_model_helper,
     init_chat_model,
 )
