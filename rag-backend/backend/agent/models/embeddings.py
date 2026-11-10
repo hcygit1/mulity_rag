@@ -1,7 +1,8 @@
 import os
 from typing import Any, Optional, Union
 
-from langchain.embeddings.base import Embeddings, _SUPPORTED_PROVIDERS, init_embeddings
+from langchain.embeddings.base import Embeddings, init_embeddings
+from langchain.embeddings.base import _BUILTIN_PROVIDERS as _SUPPORTED_PROVIDERS  # langchain 1.x 改名
 from langchain_core.runnables import Runnable
 
 
