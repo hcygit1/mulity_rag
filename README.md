@@ -175,10 +175,17 @@ npm install
 
 #### 配置 API 地址
 
-编辑 `src/api/request.js`，确保 `baseURL` 指向后端地址：
+默认无需修改：`src/api/config.js` 中 `API_CONFIG.BASE_URL` 为空，请求走相对路径，由 Vite 开发代理转发——`rag-frontend/vite.config.js` 把 `/api` 开头的请求代理到 `http://localhost:8000` 并去掉前缀。
+
+后端不在本机 8000 端口时，修改 `rag-frontend/vite.config.js` 的 `proxy` 目标：
 
 ```javascript
-const baseURL = 'http://localhost:8000'
+'/api': {
+  target: 'http://<后端地址>:<端口>',
+  changeOrigin: true,
+  secure: false,
+  rewrite: (path) => path.replace(/^\/api/, '')
+}
 ```
 
 #### 启动前端服务
