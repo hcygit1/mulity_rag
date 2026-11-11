@@ -13,7 +13,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'backend'))
 from backend.agent.prompts.raggraph_prompt import RAGGraphPrompts, RetrievalNeedDecision
 from backend.tests.test_model import load_chat_model, register_model_provider
 
-from langchain_qwq import ChatQwen
+from backend.config.models import register_qwen_provider
 from langchain_openai import ChatOpenAI
 
 from dotenv import load_dotenv
@@ -32,10 +32,7 @@ def test_structured_output():
     # )
     # 1. 注册和加载模型
     print("1. 初始化模型...")
-    register_model_provider(
-        provider_name="qwen",
-        chat_model=ChatQwen
-    )
+    register_qwen_provider()
 
     chat_model = load_chat_model(
         "qwen:qwen3-max-preview",

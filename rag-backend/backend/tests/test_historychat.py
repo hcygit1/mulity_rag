@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 
 # 加载环境变量
 load_dotenv()
-from langchain_qwq import ChatQwen
+from backend.config.models import register_qwen_provider
 # 导入必要的模块
 from backend.agent.models import (
     load_chat_model,
@@ -63,10 +63,7 @@ def print_simple_chat_history(history):
     print("-" * 30)
 
 if __name__ == "__main__":
-    register_model_provider(
-        provider_name="qwen",
-        chat_model=ChatQwen
-    )
+    register_qwen_provider()
 
     chat_model = load_chat_model(
         "qwen:qwen3-max-preview"

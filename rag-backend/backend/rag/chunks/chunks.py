@@ -2,7 +2,7 @@ from typing import List, Optional, Any, Union
 
 from langchain_text_splitters import CharacterTextSplitter, RecursiveCharacterTextSplitter
 from langchain_experimental.text_splitter import SemanticChunker
-from langchain.text_splitter import MarkdownHeaderTextSplitter
+from langchain_text_splitters import MarkdownHeaderTextSplitter  # langchain 1.x 移除了 langchain.text_splitter
 from langchain_core.embeddings import Embeddings
 from langchain_core.documents import Document
 

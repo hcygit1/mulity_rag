@@ -3,7 +3,7 @@ import os
 import time
 import json
 from docx import Document
-import PyPDF2
+import pypdf
 from typing import Optional
 from dotenv import load_dotenv
 import zipfile
@@ -40,7 +40,7 @@ class DocumentExtractor:
                 # 使用PyPDF2读取PDF
                 try:
                     with open(file_path, 'rb') as file:
-                        reader = PyPDF2.PdfReader(file)
+                        reader = pypdf.PdfReader(file)
                         text = ""
                         for page_num in range(len(reader.pages)):
                             text += reader.pages[page_num].extract_text()

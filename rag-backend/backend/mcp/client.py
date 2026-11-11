@@ -93,7 +93,7 @@ class MCPClient:
                 self.tools.append({
                     "name": tool.name,
                     "description": tool.description or "",
-                    "input_schema": tool.inputSchema if hasattr(tool, 'inputSchema') else {}
+                    "input_schema": getattr(tool, "input_schema", None) or getattr(tool, "inputSchema", {})
                 })
                 logger.debug(f"  - 工具: {tool.name}")
         except Exception as e:
@@ -143,7 +143,7 @@ class MCPClient:
                 "success": True,
                 "tool": tool_name,
                 "content": "\n".join(content) if content else "",
-                "is_error": result.isError if hasattr(result, 'isError') else False
+                "is_error": bool(getattr(result, "is_error", getattr(result, "isError", False)))
             }
             
             logger.info(f"工具 {tool_name} 执行成功")

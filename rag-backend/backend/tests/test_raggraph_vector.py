@@ -23,7 +23,7 @@ from backend.agent.contexts.raggraph_context import RAGContext
 from backend.agent.models.raggraph_models import RetrievalMode
 from backend.config.log import setup_default_logging, get_logger
 from langchain_core.messages import HumanMessage
-from langchain_qwq import ChatQwen
+from backend.config.models import register_qwen_provider
 
 # 初始化日志
 setup_default_logging()
@@ -34,10 +34,7 @@ def init_models():
     logger.info("开始初始化模型...")
 
     # 1. 注册并加载聊天模型
-    register_model_provider(
-        provider_name="qwen",
-        chat_model=ChatQwen
-    )
+    register_qwen_provider()
 
     chat_model = load_chat_model(
         "qwen:qwen3-max-preview"
